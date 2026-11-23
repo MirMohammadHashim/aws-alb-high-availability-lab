@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" width="900" height="540" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="540" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#1f2937">Credit Book behind an Application Load Balancer (lab)</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#6b7280">ap-southeast-2 (Sydney), one VPC, two Availability Zones</text>
+
+  <!-- Browser -->
+  <rect x="20" y="215" width="110" height="60" rx="8" fill="#eef2ff" stroke="#4f46e5"/>
+  <text x="75" y="242" text-anchor="middle" font-size="14" font-weight="bold" fill="#312e81">Browser</text>
+  <text x="75" y="260" text-anchor="middle" font-size="11" fill="#4b5563">HTTP :80</text>
+
+  <!-- VPC -->
+  <rect x="160" y="70" width="720" height="450" rx="10" fill="#fafafa" stroke="#9ca3af" stroke-dasharray="6 4"/>
+  <text x="176" y="92" font-size="12" font-weight="bold" fill="#374151">credit-book-vpc  10.0.0.0/16</text>
+
+  <!-- AZ columns -->
+  <rect x="190" y="105" width="310" height="395" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="345" y="125" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">ap-southeast-2a</text>
+  <rect x="530" y="105" width="330" height="395" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="695" y="125" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">ap-southeast-2b</text>
+
+  <!-- Public subnets -->
+  <rect x="205" y="135" width="280" height="220" rx="6" fill="#ecfdf5" stroke="#10b981"/>
+  <text x="217" y="153" font-size="11" fill="#065f46">Public subnet 10.0.1.0/24</text>
+  <rect x="545" y="135" width="300" height="220" rx="6" fill="#ecfdf5" stroke="#10b981"/>
+  <text x="557" y="153" font-size="11" fill="#065f46">Public subnet 10.0.2.0/24</text>
+
+  <!-- ALB spanning both -->
+  <rect x="270" y="165" width="515" height="55" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="527" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#9a3412">Application Load Balancer  (credit-book-alb)</text>
+  <text x="527" y="207" text-anchor="middle" font-size="11" fill="#7c2d12">alb-sg: HTTP 80 from my IP  |  listener HTTP:80 forwards to target group</text>
+
+  <!-- EC2 #1 -->
+  <rect x="235" y="260" width="220" height="75" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+  <text x="345" y="283" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">EC2 credit-book-backend</text>
+  <text x="345" y="301" text-anchor="middle" font-size="11" fill="#1e40af">Docker: Flask + Gunicorn</text>
+  <text x="345" y="319" text-anchor="middle" font-size="11" fill="#1e40af">backend-sg: HTTP 80 from alb-sg</text>
+  <!-- EC2 #2 -->
+  <rect x="580" y="260" width="230" height="75" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+  <text x="695" y="283" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">EC2 credit-book-backend-2</text>
+  <text x="695" y="301" text-anchor="middle" font-size="11" fill="#1e40af">Same AMI, same container</text>
+  <text x="695" y="319" text-anchor="middle" font-size="11" fill="#1e40af">backend-sg: HTTP 80 from alb-sg</text>
+
+  <!-- Arrows ALB -> EC2 -->
+  <line x1="345" y1="220" x2="345" y2="258" stroke="#374151" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="695" y1="220" x2="695" y2="258" stroke="#374151" stroke-width="2" marker-end="url(#a)"/>
+  <text x="352" y="244" font-size="10" fill="#6b7280">health check /api/health</text>
+  <text x="702" y="244" font-size="10" fill="#6b7280">health check /api/health</text>
+
+  <!-- Private subnets -->
+  <rect x="205" y="385" width="280" height="100" rx="6" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text x="217" y="403" font-size="11" fill="#5b21b6">Private subnet 10.0.11.0/24</text>
+  <rect x="545" y="385" width="300" height="100" rx="6" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text x="835" y="403" text-anchor="end" font-size="11" fill="#5b21b6">Private subnet 10.0.12.0/24</text>
+  <rect x="600" y="418" width="190" height="55" rx="8" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="695" y="441" text-anchor="middle" font-size="13" font-weight="bold" fill="#4c1d95">RDS MySQL (credit-book-db)</text>
+  <text x="695" y="459" text-anchor="middle" font-size="10" fill="#5b21b6">database-sg: 3306 from backend-sg</text>
+
+  <!-- EC2 -> RDS arrows -->
+  <path d="M345 335 L345 365 L640 365 L640 416" fill="none" stroke="#374151" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="695" y1="335" x2="695" y2="416" stroke="#374151" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- Browser to ALB -->
+  <path d="M130 245 L170 245 L170 192 L268 192" fill="none" stroke="#374151" stroke-width="2" marker-end="url(#a)"/>
+  <text x="20" y="300" font-size="10" fill="#6b7280">via Internet Gateway</text>
+
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#374151"/>
+    </marker>
+  </defs>
+</svg>
